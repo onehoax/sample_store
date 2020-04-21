@@ -24,7 +24,7 @@ If at any point an error occurs, you wil be redirected to an error page, which c
 informative error message depending on the error (user already exists, username doesn't exist, 
 wrong password, etc.)  
 
-# Note: The reset-password functionality is broken because of issues with mailgun.
+#### Note: The reset-password functionality is broken because of issues with mailgun.
 If you forget your password you can reset it with the form provided in the home screen;
 submitting the form will prompt mailgun to send you a reset password link (provided you gave a valid
 email - only tested with gmail), which is only valid for 24 hours; following the link will

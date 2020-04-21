@@ -1,3 +1,6 @@
+// Import the env variables from dotenv
+require('dotenv').config;
+
 const express = require('express')
 const Item = require('../models/Item')
 const User = require('../models/User')
@@ -160,8 +163,8 @@ router.post('/resetpassword', (req, res, next) => {
 
         // Info provided in mailgun account
         const mailgun = Mailgun({
-            apiKey: 'dba3cf5ce63e713dd4c4c20f460a453a-aa4b0867-be8e2f72',
-            domain: 'sandboxa77589de5d0f40f58a7c0338e1d87743.mailgun.org'
+            apiKey: process.env.MAILGUN_APIKEY,
+            domain: process.env.MAILGUN_DOMAIN
         })
 
         // to = email to send reset password email to

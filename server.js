@@ -1,3 +1,6 @@
+// Import environment vars from .env
+require('dotenv').config()
+
 const express = require('express')
 // Already builtin in with node
 const path = require('path')
@@ -42,7 +45,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Connect to our app to our database
-mongoose.connect('mongodb+srv://andres:123@cluster0-dogr1.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://andres:' + process.env.MONGODB_PASSWORD + '@cluster0-dogr1.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
 .then(data => {
     console.log('DB Connection Success!')
 })
@@ -88,4 +91,4 @@ app.use(express.static(path.join(__dirname, 'public')))
 // app.listen(5000)
 // console.log('App is running on http://localhost:5000')
 app.listen(80)
-console.log('App is running on http://localhost:80' )
+console.log('App is running on http://localhost:80')

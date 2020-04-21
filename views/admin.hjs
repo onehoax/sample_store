@@ -1,0 +1,66 @@
+{{!-- This page is restricted to admin only --}}
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    {{!-- This nva bar code was copied from the bootsrap website, which provides
+    templates for things like nav bars, etc. --}}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Sample Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {{!-- class="container" is defined in the bootsrap link we imported and so it applies
+    some styling to its content; also allows us to use the column and grid structure --}}
+    <div class="container">
+        <h1>Admin Page</h1>
+        {{!-- We want to create a form so that admin users can create items in the backend --}}
+        {{!-- Bootstap class="row" uses the grid layout and divides the width of the page into 12 cols;
+        we then choose the ratio to divide those 12 rows --}}
+        <div class="row">
+            {{!-- here we divide the 12 cols into 6 and 6 --}}
+            <div class="col-6">
+                <form action="/admin/additem" method="post">
+                    <input type="text" name="name" placeholder="Name"><br>
+                    <input type="text" name="description" placeholder="Description"><br>
+                    <input type="text" name="price" placeholder="Price"><br>
+                    <input type="submit" value="Add Item">
+                </form>
+            </div>
+            <div class="col-6">
+                <h3>Current Items</h3>
+                <ol>
+                    {{!-- This is how the hjs engine iterates through an array; in this
+                    case the 'items' array passed in by admin.js; then we pass in the 'name'
+                    property of each item --}}
+                    {{#items}}
+                    <li>
+                        <div class="item">
+                        {{name}}<br>
+                        <button>Add</button></div>
+                    </li>
+                    {{/items}}
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

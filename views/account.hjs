@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    {{!-- In our server.js we told our app to use the public dir for any static assests (like css);
+    therefore we just include the path with public as root --}}
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+    {{!-- This nva bar code was copied from the bootsrap website, which provides
+    templates for things like nav bars, etc. --}}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Sample Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {{!-- class="container" is defined in the bootsrap link we imported and so it applies
+    some styling to its content; also allows us to use the column and grid structure --}}
+    <div class="container">
+        <h1>Welcome {{user.email}}</h1>
+
+        {{!-- Bootstrap css lay out uses the grid to lay out items horizontally in 12 columns;
+        therefore we can divide these 12 rows into wtv ratio we want (1 container having
+        4 cols and another one having 8, or 6 and 6, or 2 and 10, etc) --}}
+        <div class="row">
+            <div class="col-8">
+                <h3>Items For Sale</h3>
+                <ol>
+                    {{!-- This is how the hjs engine iterates through an array; in this
+                    case the 'items' array passed in by account.js; then we pass in the 'name'
+                    property of each item --}}
+                    {{#items}}
+                    <li>
+                        <div class="item">
+                            {{name}}<br>
+                            {{!-- href="..." uses this link to redirec to wtv is specified in " " --}}
+                            {{!-- in this case we are using the hyperlink as a get request to add the current item
+                            (from items for sale) to the user's list of interested items; id is the property of each
+                            item assigned by the db --}}
+                            {{!-- bootsrap predefined styles for buttons --}}
+                            <a class="btn btn-success" href="/account/additem/{{id}}">Add</a>
+                        </div>
+                    </li>
+                    {{/items}}
+                </ol>
+            </div>
+            <div class="col-4">
+                <h3>My Items</h3>
+                <ol>
+                    {{#interestedItems}}
+                    <li>
+                        <div class="item">
+                            {{name}}<br>
+                            <a href="/account/removeitem/{{id}}" class="btn btn-success">Remove</a>
+                        </div>
+                    </li>
+                    {{/interestedItems}}
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

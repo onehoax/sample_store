@@ -1,0 +1,21 @@
+{
+  "name": "sample_store",
+  "version": "1.0.0",
+  "description": "Full stack web app with node, express and mongoDB",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andres Osorio",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "hjs": "0.0.6",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^5.9.7",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  }
+}

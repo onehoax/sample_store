@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    {{!-- This nva bar code was copied from the bootsrap website, which provides
+    templates for things like nav bars, etc. --}}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Sample Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {{!-- class="container" is defined in the bootsrap link we imported and so it applies
+    some styling to its content; also allows us to use the column and grid structure --}}
+    <div class="container">
+        <h1>Welcome to our sample store</h1>
+        {{!-- Send the info from form to the route/endpoint specified in 'action' --}}
+        {{!-- when this form is submitted, it will redirect from home (localhost:5000)
+        to the register route (localhost:5000/register), which will then handle the post request --}}
+        <form action="/register" method="post">
+            <input type="text" name="email" placeholder="Email"><br>
+            <input type="password" name="password" placeholder="Password"><br>
+            <input type="submit" value="Sign Up">
+        </form>
+        <h2>Login</h2>
+        {{!-- Now we are sending the info from this form to our '/login' route handler
+        when the user hits submit and redirecting from home to 'localhost:5000/login' --}}
+        <form action="/login" method="post">
+            <input type="text" name="email" placeholder="Email"><br>
+            <input type="password" name="password" placeholder="Password"><br>
+            <input type="submit" value="Log In">
+        </form>
+        <h2>Forgot Password?</h2>
+        <form action="/account/resetpassword" method="post">
+            <input type="text" name="email" placeholder="Enter Your Email"><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+
+</html>

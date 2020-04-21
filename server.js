@@ -85,5 +85,7 @@ app.set('views', path.join(__dirname, 'views'))
 // Tell the app to use the './public' folder for any static asset requests
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.listen(5000)
-console.log('App is running on http://localhost:5000')
+// app.listen(5000)
+// console.log('App is running on http://localhost:5000')
+app.listen(80)
+console.log('App is running on http://localhost:80')

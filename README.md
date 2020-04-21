@@ -2,9 +2,9 @@ Simple node fullstack website showcasaing the core functionality of an online st
 
 You can access this website, which is hosted on an EC2 AWS instance, at 35.182.54.247.  
 
-The home has functionality for signing up, logging in or resetting a password;  
+The home route has functionality for signing up, logging in or resetting a password;  
 
-A user can be either a customer user or an admin user; to sign up as an admin suer include
+A user can be either a customer user or an admin user; to sign up as an admin user include
 '@admin' in you username;  
 
 Signing up will automatically take you to the '/account' route, which shows the current items

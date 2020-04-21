@@ -1,6 +1,6 @@
 Simple node fullstack website showcasaing the core functionality of an online store:  
 
-You can access this website, which is hosted on an EC2 AWS instance, [here](http://ec2-35-182-54-247.ca-central-1.compute.amazonaws.com)
+You can access this website, which is hosted on an EC2 AWS instance, [here](https://ec2-35-182-54-247.ca-central-1.compute.amazonaws.com)
 or at 35.182.54.247.  
 
 The home route has functionality for signing up, logging in or resetting a password;  

@@ -153,155 +153,156 @@ router.get('/logout', (req, res, next) => {
 // Route handler for sending email to reseting password; '/account/resetpassword'
 router.post('/resetpassword', (req, res, next) => {
     // First find the user
-    User.findOne({email: req.body.email}, (err, user) => {
-        if (err)
-            return next(err)
+    return next(new Error('Email not found'));
+    // User.findOne({email: req.body.email}, (err, user) => {
+    //     if (err)
+    //         return next(err)
 
-        user.nonce = randomString(8)
-        user.passwordResetTime = new Date()
-        user.save()
+    //     user.nonce = randomString(8)
+    //     user.passwordResetTime = new Date()
+    //     user.save()
 
-        // Info provided in mailgun account
-        const mailgun = Mailgun({
-            apiKey: process.env.MAILGUN_APIKEY,
-            domain: process.env.MAILGUN_DOMAIN
-        })
+    //     // Info provided in mailgun account
+    //     const mailgun = Mailgun({
+    //         apiKey: process.env.MAILGUN_APIKEY,
+    //         domain: process.env.MAILGUN_DOMAIN
+    //     })
 
-        // to = email to send reset password email to
-        // from = email attached to the mailgun account
-        const data = {
-            to: req.body.email,
-            from: 'andres150291@gmail.com',
-            // sender = name in the email sent
-            sender: 'Sample Store',
-            subject: 'Password Reset Request',
-            // This is the content of the email
-            html: 'Please click <a style="color:red" href="http://localhost:5000/account/password-reset?nonce='+user.nonce+'&id='+user._id+'">HERE</a> to reset your password. This link is valdid for 24 hrs'
-        }
+    //     // to = email to send reset password email to
+    //     // from = email attached to the mailgun account
+    //     const data = {
+    //         to: req.body.email,
+    //         from: 'andres150291@gmail.com',
+    //         // sender = name in the email sent
+    //         sender: 'Sample Store',
+    //         subject: 'Password Reset Request',
+    //         // This is the content of the email
+    //         html: 'Please click <a style="color:red" href="http://localhost:5000/account/password-reset?nonce='+user.nonce+'&id='+user._id+'">HERE</a> to reset your password. This link is valdid for 24 hrs'
+    //     }
 
-        // mailgun lets us acces the mailgun sdk
-        mailgun.messages().send(data, (err, body) => {
-            if (err)
-                return next(err)
+    //     // mailgun lets us acces the mailgun sdk
+    //     mailgun.messages().send(data, (err, body) => {
+    //         if (err)
+    //             return next(err)
 
-            // Success
-            res.json({
-                confirmation: 'success',
-                data: 'reset password endpoint',
-                user: user
-            })
-        })
-    })
+    //         // Success
+    //         res.json({
+    //             confirmation: 'success',
+    //             data: 'reset password endpoint',
+    //             user: user
+    //         })
+    //     })
+    // })
 })
 
 // Route handler for reseting password; '/account/password-reset';
 // this route is called when user clicks on email sent to reset passwor;
 // the link in the email contains the user nonce and id
-router.get('/password-reset', (req, res, next) => {
-    // Grab the nonce and the user id from the request; if any of these 2
-    // args is null then we throw an error
-    const nonce = req.query.nonce
-    const user_id = req.query.id
+// router.get('/password-reset', (req, res, next) => {
+//     // Grab the nonce and the user id from the request; if any of these 2
+//     // args is null then we throw an error
+//     const nonce = req.query.nonce
+//     const user_id = req.query.id
 
-    if (nonce == null || user_id == null)
-        return next(new Error('Invalid Request'))
+//     if (nonce == null || user_id == null)
+//         return next(new Error('Invalid Request'))
 
-    // Find the user requesting the password reset in the db
-    User.findById(user_id, (err, user) => {
-        if (err)
-            return next(new Error('Invalid Request'))
+//     // Find the user requesting the password reset in the db
+//     User.findById(user_id, (err, user) => {
+//         if (err)
+//             return next(new Error('Invalid Request'))
         
-        // If either the passwordResetTime or nonce fields of the user are null
-        // this means the current user did not request a password reset and this 
-        // procedure shouldn't be happening
-        if (user.passwordResetTime == null || user.nonce == null)
-            return next(new Error('Invalid Request'))
+//         // If either the passwordResetTime or nonce fields of the user are null
+//         // this means the current user did not request a password reset and this 
+//         // procedure shouldn't be happening
+//         if (user.passwordResetTime == null || user.nonce == null)
+//             return next(new Error('Invalid Request'))
 
-        // Check that the nonce in the request is the same as the user's nonce
-        if (nonce != user.nonce)
-            return next(new Error('Invalid Request'))
+//         // Check that the nonce in the request is the same as the user's nonce
+//         if (nonce != user.nonce)
+//             return next(new Error('Invalid Request'))
 
-        // Since there's a window of 24hrs to reset the password, we need to compare 
-        // the time the password reset was requested with the current time
-        const now = new Date()
-        // Time in miliseconds
-        const diff = now - user.passwordResetTime 
-        // convert to mins
-        const mins = (diff / 1000) / 60 
+//         // Since there's a window of 24hrs to reset the password, we need to compare 
+//         // the time the password reset was requested with the current time
+//         const now = new Date()
+//         // Time in miliseconds
+//         const diff = now - user.passwordResetTime 
+//         // convert to mins
+//         const mins = (diff / 1000) / 60 
 
-        // If mins > than mins in 24 hrs, then the link to reset password has expired
-        if (mins > (24 * 60))
-            return next(new Error('Invalid Request'))
+//         // If mins > than mins in 24 hrs, then the link to reset password has expired
+//         if (mins > (24 * 60))
+//             return next(new Error('Invalid Request'))
 
-        // Pass this instead of the whole user to avoid passing uncessessary 
-        // (and possibly sensitive info to the template)
-        const data = {
-            id: user_id,
-            nonce: nonce
-        }
+//         // Pass this instead of the whole user to avoid passing uncessessary 
+//         // (and possibly sensitive info to the template)
+//         const data = {
+//             id: user_id,
+//             nonce: nonce
+//         }
 
-        // Render the ../views/password_reset.hjs template and pass in the user
-        res.render('password_reset', data)
-    })
-})
+//         // Render the ../views/password_reset.hjs template and pass in the user
+//         res.render('password_reset', data)
+//     })
+// })
 
-// Route handler for new password; '/account/new_password';
-// this route is requested when the user clicks on 'Reset Password' button
-// on page from email 
-router.post('/new_password', (req, res, next) => {
-    // Grab the form (request) info
-    const password1 = req.body.password1
-    const password2 = req.body.password2
-    const user_id = req.body.id
-    const nonce = req.body.nonce
+// // Route handler for new password; '/account/new_password';
+// // this route is requested when the user clicks on 'Reset Password' button
+// // on page from email 
+// router.post('/new_password', (req, res, next) => {
+//     // Grab the form (request) info
+//     const password1 = req.body.password1
+//     const password2 = req.body.password2
+//     const user_id = req.body.id
+//     const nonce = req.body.nonce
 
-    // If any of the fields in the form are null then error
-    if (password1 == "" || password2 == "" || user_id == null || nonce == null)
-        return next(new Error('Invalid Request'))
+//     // If any of the fields in the form are null then error
+//     if (password1 == "" || password2 == "" || user_id == null || nonce == null)
+//         return next(new Error('Invalid Request'))
 
-    // If passwords are no the same then error
-    if (password1 != password2)
-        return next(new Error('Passwords do not match'))
+//     // If passwords are no the same then error
+//     if (password1 != password2)
+//         return next(new Error('Passwords do not match'))
 
-    // Recheck that the user.nonce == the nonce in request and that the
-    // reset password time has not expired
-    User.findById(user_id, (err, user) => {
-        if (err)
-            return next(new Error('Invalid Request'))
+//     // Recheck that the user.nonce == the nonce in request and that the
+//     // reset password time has not expired
+//     User.findById(user_id, (err, user) => {
+//         if (err)
+//             return next(new Error('Invalid Request'))
         
-        // If either the passwordResetTime or nonce fields of the user are null
-        // this means the current user did not request a password reset and this 
-        // procedure shouldn't be happening
-        if (user.passwordResetTime == null || user.nonce == null)
-            return next(new Error('Invalid Request'))
+//         // If either the passwordResetTime or nonce fields of the user are null
+//         // this means the current user did not request a password reset and this 
+//         // procedure shouldn't be happening
+//         if (user.passwordResetTime == null || user.nonce == null)
+//             return next(new Error('Invalid Request'))
 
-        // Check that the nonce in the request is the same as the user's nonce
-        if (nonce != user.nonce)
-            return next(new Error('Invalid Request'))
+//         // Check that the nonce in the request is the same as the user's nonce
+//         if (nonce != user.nonce)
+//             return next(new Error('Invalid Request'))
 
-        // Since there's a window of 24hrs to reset the password, we need to compare 
-        // the time the password reset was requested with the current time
-        const now = new Date()
-        // Time in miliseconds
-        const diff = now - user.passwordResetTime 
-        // convert to mins
-        const mins = (diff / 1000) / 60 
+//         // Since there's a window of 24hrs to reset the password, we need to compare 
+//         // the time the password reset was requested with the current time
+//         const now = new Date()
+//         // Time in miliseconds
+//         const diff = now - user.passwordResetTime 
+//         // convert to mins
+//         const mins = (diff / 1000) / 60 
 
-        // If mins > than mins in 24 hrs, then the link to reset password has expired
-        if (mins > (24 * 60))
-            return next(new Error('Invalid Request'))
+//         // If mins > than mins in 24 hrs, then the link to reset password has expired
+//         if (mins > (24 * 60))
+//             return next(new Error('Invalid Request'))
 
-        // If we get here then all checks have passed and we can reset the password 
-        // for the current user; first hash the new password provided
-        const hashedPw = bcrypt.hashSync(password1, 10)
-        // Make the hashed password the new user's password
-        user.password = hashedPw
-        // save the changes made to the current user object in the db
-        user.save()
+//         // If we get here then all checks have passed and we can reset the password 
+//         // for the current user; first hash the new password provided
+//         const hashedPw = bcrypt.hashSync(password1, 10)
+//         // Make the hashed password the new user's password
+//         user.password = hashedPw
+//         // save the changes made to the current user object in the db
+//         user.save()
 
-        // Finally redirect user to homepage so the can log in with new password
-        res.redirect('/')
-    })
-})
+//         // Finally redirect user to homepage so the can log in with new password
+//         res.redirect('/')
+//     })
+// })
 
 module.exports = router
